@@ -3,6 +3,8 @@ package com.allianz.collabarativechallenge.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +41,7 @@ public class CityRestController {
 	}
 	
 	@PostMapping("/api/city")
-	public ResponseEntity<Object> saveCity(City city){
+	public ResponseEntity<Object> saveCity(@Valid @RequestBody City city){
 		cityService.saveCity(city);
 		URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(city.getId()).toUri();
 	    return ResponseEntity.created(location).build();
@@ -48,13 +50,16 @@ public class CityRestController {
 	
 	@DeleteMapping("/api/city/{cityId}")
 	public void deleteCity(@PathVariable(name="cityId") String cityId) {
+		City cty = cityService.getCity(cityId);
+		if(cty == null) 
+			throw new CityNotFoundException("id-"+cityId);		
 		cityService.deleteCity(cityId);
 	}
 	
 	@PutMapping("/api/city/{cityId}")
-	public void updateCity(@RequestBody City city, @PathVariable(name="cityId") String cityId) {
+	public void updateCity(@Valid @RequestBody City city, @PathVariable(name="cityId") String cityId) {
 		City cty = cityService.getCity(cityId);
-		if(city == null) 
+		if(cty == null) 
 			throw new CityNotFoundException("id-"+cityId);		
 		cityService.updateCity(city);
 	}
