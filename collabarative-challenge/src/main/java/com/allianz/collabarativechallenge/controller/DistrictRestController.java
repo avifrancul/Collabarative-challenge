@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.allianz.collabarativechallenge.dto.DistrictDTO;
 import com.allianz.collabarativechallenge.entity.City;
 import com.allianz.collabarativechallenge.entity.District;
 import com.allianz.collabarativechallenge.exception.CityNotFoundException;
@@ -33,8 +35,7 @@ public class DistrictRestController {
 	
 	@GetMapping("/api/districts")
 	public List<District> getAllDistricts(){
-		List<District> districts = districtService.retriveAllDistricts();
-		return districts;
+		return districtService.retriveAllDistricts();
 	}
 	
 	@GetMapping("/api/district/{districtId}")
@@ -46,7 +47,9 @@ public class DistrictRestController {
 	}
 	
 	@PostMapping("/api/district/")
-	public ResponseEntity<Object> saveDistrict(@Valid @RequestBody District district){
+	public ResponseEntity<Object> saveDistrict(@Valid @RequestBody DistrictDTO districtDTO){
+		ModelMapper modelMapper = new ModelMapper();
+	    District district = modelMapper.map(districtDTO, District.class);
 		String cityId = district.getCity().getId();
 		City cty = cityService.getCity(cityId);
 		if(cty == null) 
@@ -65,7 +68,9 @@ public class DistrictRestController {
 	}
 	
 	@PutMapping("/api/district/{districtId}")
-	public void updateDistrict(@Valid @RequestBody District district, @PathVariable(name="districtId") String districtId ) {
+	public void updateDistrict(@Valid @RequestBody DistrictDTO districtDTO, @PathVariable(name="districtId") String districtId ) {
+		ModelMapper modelMapper = new ModelMapper();
+	    District district = modelMapper.map(districtDTO, District.class);		
 		String cityId = district.getCity().getId();
 		City cty = cityService.getCity(cityId);
 		if(cty == null) 
@@ -73,7 +78,7 @@ public class DistrictRestController {
 		District dst = districtService.getDistrict(districtId);
 		if(dst == null) 
 			throw new DistrictNotFoundException("id-"+districtId);	
-		districtService.updateDistrict(district);
+		districtService.saveDistrict(district);
 	}
 	
 	@GetMapping("/api/district/{cityId}/districts")

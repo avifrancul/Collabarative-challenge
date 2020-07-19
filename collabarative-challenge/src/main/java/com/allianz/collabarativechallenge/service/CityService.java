@@ -10,6 +10,5 @@ public interface CityService {
 	public City getCity(String cityId);
 	public void saveCity(City city);
 	public void deleteCity(String cityId);
-	public void updateCity(City city);
 
 }

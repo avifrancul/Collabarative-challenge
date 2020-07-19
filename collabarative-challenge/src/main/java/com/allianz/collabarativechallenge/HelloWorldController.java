@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class HelloWorldController {
 
-    @RequestMapping(method = RequestMethod.GET,path="/hello-world")
+    @GetMapping("/hello-world")
     public String helloWorld(){
         return "This is just the begining!!";
     }
 
-    @RequestMapping(method = RequestMethod.GET,path="/hello-world-bean")
+    @GetMapping("/hello-world-bean")
     public HelloWorldbean helloWorldbean(){
         return new HelloWorldbean("Hello World");
     }

@@ -10,5 +10,5 @@ import com.allianz.collabarativechallenge.entity.District;
 @Repository
 public interface DistrictRepository extends JpaRepository<District, String> {
 
-	List<District> findBycity(String cityId);
+	List<District> findByCityId(String cityId);
 }

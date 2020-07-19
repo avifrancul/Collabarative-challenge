@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.allianz.collabarativechallenge.dto.CityDTO;
 import com.allianz.collabarativechallenge.entity.City;
 import com.allianz.collabarativechallenge.exception.CityNotFoundException;
 import com.allianz.collabarativechallenge.service.CityService;
@@ -28,8 +30,7 @@ public class CityRestController {
 	
 	@GetMapping("/api/cities")
 	public List<City> getAllCity(){
-		List<City> allCity = cityService.retrieveCities();
-		return allCity;
+		return cityService.retrieveCities();
 	}
 	
 	@GetMapping("/api/city/{cityId}")
@@ -41,7 +42,9 @@ public class CityRestController {
 	}
 	
 	@PostMapping("/api/city")
-	public ResponseEntity<Object> saveCity(@Valid @RequestBody City city){
+	public ResponseEntity<Object> saveCity(@Valid @RequestBody CityDTO cityDTO){
+		ModelMapper modelMapper = new ModelMapper();
+	    City city = modelMapper.map(cityDTO, City.class);
 		cityService.saveCity(city);
 		URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(city.getId()).toUri();
 	    return ResponseEntity.created(location).build();
@@ -57,11 +60,13 @@ public class CityRestController {
 	}
 	
 	@PutMapping("/api/city/{cityId}")
-	public void updateCity(@Valid @RequestBody City city, @PathVariable(name="cityId") String cityId) {
+	public void updateCity(@Valid @RequestBody CityDTO cityDTO, @PathVariable(name="cityId") String cityId) {
 		City cty = cityService.getCity(cityId);
 		if(cty == null) 
-			throw new CityNotFoundException("id-"+cityId);		
-		cityService.updateCity(city);
+			throw new CityNotFoundException("id-"+cityId);	
+		ModelMapper modelMapper = new ModelMapper();
+	    City city = modelMapper.map(cityDTO, City.class);
+		cityService.saveCity(city);
 	}
 	
 	

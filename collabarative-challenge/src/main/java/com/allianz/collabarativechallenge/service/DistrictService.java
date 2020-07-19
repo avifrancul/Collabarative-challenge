@@ -11,6 +11,5 @@ public interface DistrictService {
 	public District getDistrict(String districtId);
 	public void saveDistrict (District district);
 	public void deleteDistrict(String districtId);
-	public void updateDistrict(District district);
 
 }

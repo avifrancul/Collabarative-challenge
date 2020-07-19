@@ -18,35 +18,28 @@ public class CityServiceImpl implements CityService {
 
 	@Override
 	public List<City> retrieveCities() {
-		// TODO Auto-generated method stub
-		List<City> cities = cityRepository.findAll();
-		return cities;
+		return cityRepository.findAll();
 	}
 
 	@Override
 	public City getCity(String cityId) {
-		// TODO Auto-generated method stub
 		Optional<City> opCity = cityRepository.findById(cityId);
-		return opCity.get();
+		if(opCity.isPresent()) 
+			return opCity.get();
+		return null;
 	}
 
 	@Override
 	public void saveCity(City city) {
-		// TODO Auto-generated method stub
 		cityRepository.save(city);
 	}
 
 	@Override
 	public void deleteCity(String cityId) {
-		// TODO Auto-generated method stub
 		cityRepository.deleteById(cityId);
 	}
 
-	@Override
-	public void updateCity(City city) {
-		// TODO Auto-generated method stub
-		cityRepository.save(city);
-	}
+
 	
 	
 }

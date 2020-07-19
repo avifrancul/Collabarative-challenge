@@ -22,48 +22,33 @@ public class DistrictServiceImpl implements DistrictService {
 
 	@Override
 	public List<District> retriveAllDistricts() {
-		// TODO Auto-generated method stub
-		List<District> districts = districtRepository.findAll();
-		return districts;
+		return districtRepository.findAll();
 	}
 
 	@Override
 	public List<District> retrieveDistrictsByCityId(String cityId) {
-		// TODO Auto-generated method stub
-		return districtRepository.findBycity(cityId);
+		return districtRepository.findByCityId(cityId);
 	}
 
 	@Override
 	public District getDistrict(String districtId) {
-		// TODO Auto-generated method stub
 		Optional<District> optDistrict = districtRepository.findById(districtId);
-		return optDistrict.get();
+		if(optDistrict.isPresent())
+			return optDistrict.get();
+		return null;
 	}
 
 	@Override
-	public void saveDistrict(District district) {
-		// TODO Auto-generated method stub
-		String cityId = district.getCity().getId();
-		if(cityRepository.findById(cityId)!=null) {
+	public void saveDistrict(District district) {		
 			districtRepository.save(district);
-		}
 		
 	}
 
 	@Override
 	public void deleteDistrict(String districtId) {
-		// TODO Auto-generated method stub
 		districtRepository.deleteById(districtId);
 	}
 
-	@Override
-	public void updateDistrict(District district) {
-		// TODO Auto-generated method stub
-		String cityId = district.getCity().getId();
-		if(cityRepository.findById(cityId)!=null) {
-			districtRepository.save(district);
-		}
-	}
 	
 	
 }
