@@ -1,12 +1,12 @@
-package com.allianz.collabarativechallenge.city;
+package com.allianz.collabarativechallenge.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class CityNotFoundException extends RuntimeException {
+public class DistrictNotFoundException extends RuntimeException {
 
-    public CityNotFoundException(String message) {
+    public DistrictNotFoundException(String message) {
         super(message);
     }
 }

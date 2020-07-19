@@ -1,6 +1,5 @@
 package com.allianz.collabarativechallenge.exception;
 
-import com.allianz.collabarativechallenge.city.CityNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +36,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity ( exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(DistrictNotFoundException.class)
+    public final ResponseEntity<Object> handleDistrictNotFoundException(DistrictNotFoundException ex, WebRequest request) throws Exception {
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
+        return new ResponseEntity ( exceptionResponse, HttpStatus.NOT_FOUND);
+    }
 
 
 }
