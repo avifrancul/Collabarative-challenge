@@ -28,11 +28,8 @@ public class DistrictServiceImpl implements DistrictService {
 	}
 
 	@Override
-	public District getDistrict(String districtId) {
-		Optional<District> optDistrict = districtRepository.findById(districtId);
-		if(optDistrict.isPresent())
-			return optDistrict.get();
-		return null;
+	public Optional<District> getDistrict(String districtId) {
+		return districtRepository.findById(districtId);
 	}
 
 	@Override

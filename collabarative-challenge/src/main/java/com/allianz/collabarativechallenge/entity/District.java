@@ -1,10 +1,15 @@
 package com.allianz.collabarativechallenge.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.OnDelete;
@@ -16,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class District {
 	@Id
 	String id;
+	@NotNull
 	@Size(min=2, message = "district Name should have atleast 4 characters")
 	String districtName;
 	
@@ -24,6 +30,9 @@ public class District {
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private City city;
+	
+	@OneToMany(mappedBy ="district", cascade={CascadeType.ALL})
+	private List<Concentration> concentration;
 
 	public String getId() {
 		return id;
@@ -47,6 +56,20 @@ public class District {
 
 	public void setCity(City city) {
 		this.city = city;
+	}
+
+	public List<Concentration> getConcentration() {
+		return concentration;
+	}
+
+	public void setConcentration(List<Concentration> concentration) {
+		this.concentration = concentration;
+	}
+
+	@Override
+	public String toString() {
+		return "District [id=" + id + ", districtName=" + districtName + ", city=" + city + ", concentration="
+				+ concentration + "]";
 	}
 
 }

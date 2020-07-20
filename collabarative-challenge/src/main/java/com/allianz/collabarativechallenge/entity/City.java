@@ -6,12 +6,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
 public class City {
 	@Id
 	String id;
+	@NotNull
 	@Size(min=2, message = "city Name should have atleast 4 characters")
 	String cityName;
 	

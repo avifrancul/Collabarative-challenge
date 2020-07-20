@@ -34,9 +34,9 @@ public class DistrictRestController {
 	private CityService cityService;
 	
 	@GetMapping("/district/{districtId}")
-	public District getDistrict(@PathVariable(name="districtId") String districtId) {
-		District dst = districtService.getDistrict(districtId);
-		if(dst == null) 
+	public Optional<District> getDistrict(@PathVariable(name="districtId") String districtId) {
+		Optional<District> dst = districtService.getDistrict(districtId);
+		if(!dst.isPresent()) 
 			throw new RecordNotFoundException("id-"+districtId);
 		return districtService.getDistrict(districtId);
 	}
@@ -56,8 +56,8 @@ public class DistrictRestController {
 	
 	@DeleteMapping("/district/{districtId}")
 	public void deleteDistrict(@PathVariable(name="districtId") String districtId) {
-		District dst = districtService.getDistrict(districtId);
-		if(dst == null) 
+		Optional<District> dst = districtService.getDistrict(districtId);
+		if(!dst.isPresent()) 
 			throw new RecordNotFoundException("id-"+districtId);	
 		districtService.deleteDistrict(districtId);
 	}
@@ -70,8 +70,8 @@ public class DistrictRestController {
 		Optional<City> city = cityService.getCity(cityId);
 		if (!city.isPresent()) 
 			throw new RecordNotFoundException("id-"+cityId);	
-		District dst = districtService.getDistrict(districtId);
-		if(dst == null) 
+		Optional<District> dst = districtService.getDistrict(districtId);
+		if(!dst.isPresent()) 
 			throw new RecordNotFoundException("id-"+districtId);	
 		districtService.saveDistrict(district);
 	}
