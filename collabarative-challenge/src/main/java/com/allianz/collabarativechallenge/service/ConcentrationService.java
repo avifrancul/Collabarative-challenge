@@ -1,7 +1,6 @@
 package com.allianz.collabarativechallenge.service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
