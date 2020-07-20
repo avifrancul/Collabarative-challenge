@@ -6,7 +6,6 @@ import com.allianz.collabarativechallenge.entity.District;
 
 public interface DistrictService {
 	
-	public List<District> retriveAllDistricts();
 	public List<District> retrieveDistrictsByCityId(String cityId);
 	public District getDistrict(String districtId);
 	public void saveDistrict (District district);

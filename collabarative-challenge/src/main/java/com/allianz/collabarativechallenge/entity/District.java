@@ -10,6 +10,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class District {
 	@Id
@@ -20,6 +22,7 @@ public class District {
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	@JoinColumn(name="CITY_ID", nullable = false)
 	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JsonIgnore
 	private City city;
 
 	public String getId() {

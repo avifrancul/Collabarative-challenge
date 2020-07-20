@@ -20,27 +20,20 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     public final ResponseEntity<Object> handleAllException(Exception ex, WebRequest request) throws Exception {
 
        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
-      return new ResponseEntity ( exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(CityNotFoundException.class)
-    public final ResponseEntity<Object> handleCityNotFoundException(CityNotFoundException ex, WebRequest request) throws Exception {
-
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
-        return new ResponseEntity ( exceptionResponse, HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>( exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),"Validation failed",ex.getBindingResult().toString());
-        return new ResponseEntity ( exceptionResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<> ( exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(DistrictNotFoundException.class)
-    public final ResponseEntity<Object> handleDistrictNotFoundException(DistrictNotFoundException ex, WebRequest request) throws Exception {
+    @ExceptionHandler(RecordNotFoundException.class)
+    public final ResponseEntity<Object> handleDistrictNotFoundException(RecordNotFoundException ex, WebRequest request) throws Exception {
 
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
-        return new ResponseEntity ( exceptionResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<> ( exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
 

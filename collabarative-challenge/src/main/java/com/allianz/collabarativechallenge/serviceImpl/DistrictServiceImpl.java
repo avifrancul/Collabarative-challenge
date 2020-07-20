@@ -20,10 +20,7 @@ public class DistrictServiceImpl implements DistrictService {
 	@Autowired
 	CityRepository cityRepository;
 
-	@Override
-	public List<District> retriveAllDistricts() {
-		return districtRepository.findAll();
-	}
+
 
 	@Override
 	public List<District> retrieveDistrictsByCityId(String cityId) {

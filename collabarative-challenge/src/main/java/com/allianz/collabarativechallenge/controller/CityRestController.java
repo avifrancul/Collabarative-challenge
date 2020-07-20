@@ -2,6 +2,7 @@ package com.allianz.collabarativechallenge.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -19,7 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.allianz.collabarativechallenge.dto.CityDTO;
 import com.allianz.collabarativechallenge.entity.City;
-import com.allianz.collabarativechallenge.exception.CityNotFoundException;
+import com.allianz.collabarativechallenge.exception.RecordNotFoundException;
 import com.allianz.collabarativechallenge.service.CityService;
 
 @RestController
@@ -28,20 +29,20 @@ public class CityRestController {
 	@Autowired
 	private CityService cityService;
 	
-	@GetMapping("/api/cities")
+	@GetMapping("/cities")
 	public List<City> getAllCity(){
 		return cityService.retrieveCities();
 	}
 	
-	@GetMapping("/api/city/{cityId}")
-	public City getCity(@PathVariable(name="cityId") String cityId){
-		City city = cityService.getCity(cityId);
-		if(city == null) 
-			throw new CityNotFoundException("id-"+cityId);
+	@GetMapping("/city/{cityId}")
+	public Optional<City> getCity(@PathVariable(name="cityId") String cityId){
+		Optional<City> city = cityService.getCity(cityId);
+		if (!city.isPresent())
+			throw new RecordNotFoundException("id-"+cityId);
 		return city;
 	}
 	
-	@PostMapping("/api/city")
+	@PostMapping("/city")
 	public ResponseEntity<Object> saveCity(@Valid @RequestBody CityDTO cityDTO){
 		ModelMapper modelMapper = new ModelMapper();
 	    City city = modelMapper.map(cityDTO, City.class);
@@ -51,19 +52,19 @@ public class CityRestController {
 
 	}
 	
-	@DeleteMapping("/api/city/{cityId}")
+	@DeleteMapping("/city/{cityId}")
 	public void deleteCity(@PathVariable(name="cityId") String cityId) {
-		City cty = cityService.getCity(cityId);
-		if(cty == null) 
-			throw new CityNotFoundException("id-"+cityId);		
+		Optional<City> city = cityService.getCity(cityId);
+		if (!city.isPresent())
+			throw new RecordNotFoundException("id-"+cityId);		
 		cityService.deleteCity(cityId);
 	}
 	
-	@PutMapping("/api/city/{cityId}")
+	@PutMapping("/city/{cityId}")
 	public void updateCity(@Valid @RequestBody CityDTO cityDTO, @PathVariable(name="cityId") String cityId) {
-		City cty = cityService.getCity(cityId);
-		if(cty == null) 
-			throw new CityNotFoundException("id-"+cityId);	
+		Optional<City> cty = cityService.getCity(cityId);
+		if (!cty.isPresent()) 
+			throw new RecordNotFoundException("id-"+cityId);	
 		ModelMapper modelMapper = new ModelMapper();
 	    City city = modelMapper.map(cityDTO, City.class);
 		cityService.saveCity(city);
