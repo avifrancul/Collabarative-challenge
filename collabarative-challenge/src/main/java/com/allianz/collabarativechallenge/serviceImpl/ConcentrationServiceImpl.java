@@ -44,7 +44,9 @@ public class ConcentrationServiceImpl implements ConcentrationService {
 
 	@Override
 	public List<Concentration> findByDistrictIdAndEndDateBetween(String districtId, LocalDate start, LocalDate end) {
+		System.out.println("before start="+start);
 		java.util.Date startDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		System.out.println("after start="+startDate);
 		java.util.Date endDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		return concentrationRepository.findByDistrictIdAndEntryDateBetween(districtId, startDate, endDate);
 	}

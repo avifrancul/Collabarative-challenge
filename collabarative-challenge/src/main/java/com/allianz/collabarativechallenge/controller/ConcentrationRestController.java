@@ -24,6 +24,7 @@ import com.allianz.collabarativechallenge.dto.ConcentrationDTO;
 import com.allianz.collabarativechallenge.entity.Concentration;
 import com.allianz.collabarativechallenge.entity.District;
 import com.allianz.collabarativechallenge.exception.RecordNotFoundException;
+import com.allianz.collabarativechallenge.exception.ResourceAlreadyExists;
 import com.allianz.collabarativechallenge.service.ConcentrationService;
 import com.allianz.collabarativechallenge.service.DistrictService;
 
@@ -45,12 +46,15 @@ public class ConcentrationRestController {
 	}
 	
 	@PostMapping("/concentration/{districtId}")
-	public ResponseEntity<Object> saveCity(@PathVariable(name="districtId") String districtId,@Valid @RequestBody ConcentrationDTO concentrationDTO){
-		ModelMapper modelMapper = new ModelMapper();
-		Concentration concentration = modelMapper.map(concentrationDTO, Concentration.class);
+	public ResponseEntity<Object> saveConcentration(@PathVariable(name="districtId") String districtId,@Valid @RequestBody ConcentrationDTO concentrationDTO){
 		Optional<District> district = districtService.getDistrict(districtId);
 		if (!district.isPresent())
-			throw new RecordNotFoundException("id-"+districtId);			
+			throw new RecordNotFoundException("id-"+districtId);	
+		Optional<Concentration> conc = concentrationService.getConcentration(concentrationDTO.getId());
+		if (conc.isPresent())
+			throw new ResourceAlreadyExists("id-"+concentrationDTO.getId());	
+		ModelMapper modelMapper = new ModelMapper();
+		Concentration concentration = modelMapper.map(concentrationDTO, Concentration.class);
 		concentration.setDistrict(district.get());
 		concentrationService.saveConcentration(concentration);
 		URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(concentration.getId()).toUri();
@@ -86,13 +90,14 @@ public class ConcentrationRestController {
 		concentrationService.deleteConcentration(concentrationId);
 	}
 	
-	@PutMapping("/concentration/{concentrationId}")
-	public void updateConcentration(@Valid @RequestBody ConcentrationDTO concentrationDTO, @PathVariable(name="concentrationId") Long concentrationId) {
-		Optional<Concentration> concentrate = concentrationService.getConcentration(concentrationId);
+	@PutMapping("/concentration")
+	public void updateConcentration(@Valid @RequestBody ConcentrationDTO concentrationDTO) {
+		Optional<Concentration> concentrate = concentrationService.getConcentration(concentrationDTO.getId());
 		if (!concentrate.isPresent())
-			throw new RecordNotFoundException("id-"+concentrationId);	
+			throw new RecordNotFoundException("id-"+concentrationDTO.getId());	
 		ModelMapper modelMapper = new ModelMapper();
 		Concentration concentration = modelMapper.map(concentrationDTO, Concentration.class);
+		concentration.setDistrict(concentrate.get().getDistrict());
 		concentrationService.saveConcentration(concentration);
 	}
 	

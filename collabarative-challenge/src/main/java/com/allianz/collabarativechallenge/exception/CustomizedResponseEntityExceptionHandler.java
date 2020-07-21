@@ -30,10 +30,17 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler(RecordNotFoundException.class)
-    public final ResponseEntity<Object> handleDistrictNotFoundException(RecordNotFoundException ex, WebRequest request) throws Exception {
+    public final ResponseEntity<Object> handleRecordFoundException(RecordNotFoundException ex, WebRequest request) throws Exception {
 
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
         return new ResponseEntity<> ( exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+    
+    @ExceptionHandler(ResourceAlreadyExists.class)
+    public final ResponseEntity<Object> handleResourceAlreadyExists(ResourceAlreadyExists ex, WebRequest request) throws Exception {
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),ex.getMessage(),request.getDescription(false));
+        return new ResponseEntity<> ( exceptionResponse, HttpStatus.CONFLICT);
     }
 
 

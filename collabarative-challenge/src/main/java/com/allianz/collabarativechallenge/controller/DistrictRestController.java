@@ -22,6 +22,7 @@ import com.allianz.collabarativechallenge.dto.DistrictDTO;
 import com.allianz.collabarativechallenge.entity.City;
 import com.allianz.collabarativechallenge.entity.District;
 import com.allianz.collabarativechallenge.exception.RecordNotFoundException;
+import com.allianz.collabarativechallenge.exception.ResourceAlreadyExists;
 import com.allianz.collabarativechallenge.service.CityService;
 import com.allianz.collabarativechallenge.service.DistrictService;
 
@@ -43,11 +44,14 @@ public class DistrictRestController {
 	
 	@PostMapping("/district/{cityId}")
 	public ResponseEntity<Object> saveDistrict(@PathVariable(name="cityId") String cityId,@Valid @RequestBody DistrictDTO districtDTO){
-		ModelMapper modelMapper = new ModelMapper();
-	    District district = modelMapper.map(districtDTO, District.class);
-	    Optional<City> cty = cityService.getCity(cityId);
+		Optional<City> cty = cityService.getCity(cityId);
 		if (!cty.isPresent())
-			throw new RecordNotFoundException("id-"+cityId);	
+			throw new RecordNotFoundException("id-"+cityId);
+		Optional<District> dist = districtService.getDistrict(districtDTO.getId());
+		if (dist.isPresent())
+			throw new ResourceAlreadyExists("id-"+districtDTO.getId());		
+		ModelMapper modelMapper = new ModelMapper();
+	    District district = modelMapper.map(districtDTO, District.class);	    
 		district.setCity(cty.get());
 		districtService.saveDistrict(district);
 		URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(district.getId()).toUri();
@@ -62,17 +66,15 @@ public class DistrictRestController {
 		districtService.deleteDistrict(districtId);
 	}
 	
-	@PutMapping("/district/{districtId}")
-	public void updateDistrict(@Valid @RequestBody DistrictDTO districtDTO, @PathVariable(name="districtId") String districtId ) {
-		ModelMapper modelMapper = new ModelMapper();
-	    District district = modelMapper.map(districtDTO, District.class);		
-		String cityId = district.getCity().getId();
-		Optional<City> city = cityService.getCity(cityId);
-		if (!city.isPresent()) 
-			throw new RecordNotFoundException("id-"+cityId);	
-		Optional<District> dst = districtService.getDistrict(districtId);
+	@PutMapping("/district")
+	public void updateDistrict(@Valid @RequestBody DistrictDTO districtDTO ) {		
+			
+		Optional<District> dst = districtService.getDistrict(districtDTO.getId());
 		if(!dst.isPresent()) 
-			throw new RecordNotFoundException("id-"+districtId);	
+			throw new RecordNotFoundException("id-"+districtDTO.getId());	
+		ModelMapper modelMapper = new ModelMapper();
+	    District district = modelMapper.map(districtDTO, District.class);
+	    district.setCity(dst.get().getCity());
 		districtService.saveDistrict(district);
 	}
 	

@@ -2,11 +2,13 @@ package com.allianz.collabarativechallenge.dto;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
 public class CityDTO {
+	@NotEmpty
 	@NotNull
 	String id;
 	@Size(min=2, message = "city Name should have atleast 4 characters")

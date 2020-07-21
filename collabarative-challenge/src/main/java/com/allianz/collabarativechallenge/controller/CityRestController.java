@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.allianz.collabarativechallenge.dto.CityDTO;
 import com.allianz.collabarativechallenge.entity.City;
 import com.allianz.collabarativechallenge.exception.RecordNotFoundException;
+import com.allianz.collabarativechallenge.exception.ResourceAlreadyExists;
 import com.allianz.collabarativechallenge.service.CityService;
 
 @RestController
@@ -44,6 +45,9 @@ public class CityRestController {
 	
 	@PostMapping("/city")
 	public ResponseEntity<Object> saveCity(@Valid @RequestBody CityDTO cityDTO){
+		Optional<City> cty = cityService.getCity(cityDTO.getId());
+		if (cty.isPresent())
+			throw new ResourceAlreadyExists("id-"+cityDTO.getId());
 		ModelMapper modelMapper = new ModelMapper();
 	    City city = modelMapper.map(cityDTO, City.class);
 		cityService.saveCity(city);
@@ -60,11 +64,11 @@ public class CityRestController {
 		cityService.deleteCity(cityId);
 	}
 	
-	@PutMapping("/city/{cityId}")
-	public void updateCity(@Valid @RequestBody CityDTO cityDTO, @PathVariable(name="cityId") String cityId) {
-		Optional<City> cty = cityService.getCity(cityId);
+	@PutMapping("/city")
+	public void updateCity(@Valid @RequestBody CityDTO cityDTO) {
+		Optional<City> cty = cityService.getCity(cityDTO.getId());
 		if (!cty.isPresent()) 
-			throw new RecordNotFoundException("id-"+cityId);	
+			throw new RecordNotFoundException("id-"+cityDTO.getId());	
 		ModelMapper modelMapper = new ModelMapper();
 	    City city = modelMapper.map(cityDTO, City.class);
 		cityService.saveCity(city);
