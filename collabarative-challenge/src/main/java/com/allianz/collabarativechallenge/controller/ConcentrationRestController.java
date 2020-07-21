@@ -1,7 +1,7 @@
 package com.allianz.collabarativechallenge.controller;
 
 import java.net.URI;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,8 +72,8 @@ public class ConcentrationRestController {
 	
 	@GetMapping("/district/{districtId}/concentractionsdates/{startDate}/{endDate}")
 	public List<Concentration> getAllConcentrationsByDistrictIdAndDate(@PathVariable(name="districtId") String districtId, 
-			@PathVariable(name="startDate") @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDate startDate,  
-			@PathVariable(name="endDate")  @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDate endDate){
+			@PathVariable(name="startDate") @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime startDate,  
+			@PathVariable(name="endDate")  @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime endDate){
 		
 		Optional<District> district = districtService.getDistrict(districtId);
 		if (!district.isPresent())

@@ -1,4 +1,4 @@
-package com.allianz.collabarativechallenge.serviceImpl;
+package com.allianz.collabarativechallenge.serviceimpl;
 
 import java.util.List;
 import java.util.Optional;

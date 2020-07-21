@@ -1,9 +1,9 @@
-package com.allianz.collabarativechallenge.serviceImpl;
+package com.allianz.collabarativechallenge.serviceimpl;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +43,9 @@ public class ConcentrationServiceImpl implements ConcentrationService {
 	}
 
 	@Override
-	public List<Concentration> findByDistrictIdAndEndDateBetween(String districtId, LocalDate start, LocalDate end) {
-		System.out.println("before start="+start);
-		java.util.Date startDate = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		System.out.println("after start="+startDate);
-		java.util.Date endDate = Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	public List<Concentration> findByDistrictIdAndEndDateBetween(String districtId, LocalDateTime start, LocalDateTime end) {
+		java.util.Date startDate = Date.from(start.atZone(ZoneId.systemDefault()).toInstant());
+		java.util.Date endDate = Date.from(end.atZone(ZoneId.systemDefault()).toInstant());
 		return concentrationRepository.findByDistrictIdAndEntryDateBetween(districtId, startDate, endDate);
 	}
 
